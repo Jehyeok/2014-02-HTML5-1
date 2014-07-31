@@ -25,6 +25,7 @@ function insertTODO(e) {
 
 		// 리무브 이벤트 등록
 		addRemoveEventToNewElement(todoList);
+		addCheckEventToNewElement(todoList);
 	}
 }
 
@@ -33,6 +34,19 @@ function addRemoveEventToNewElement() {
 	
 	// 리무브 이벤트 등록
 	todo.querySelector('.destroy').addEventListener('click', removeTODO.bind(this, todoList), false);
+}
+
+function addCheckEventToNewElement() {
+	var todo = todoList.lastElementChild;
+
+	todo.querySelector('input').addEventListener('click', check, false);
+}
+
+function check(e) {
+	var todo = e.target.parentNode.parentNode;
+
+	if (this.checked === true) todo.className = 'completed';
+	else todo.className = 'appended';
 }
 
 function removeTODO(todoList, e) {

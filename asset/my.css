@@ -1,12 +1,19 @@
 li {
 	opacity: 0;
-	transition: all 1s;
+	transition: opacity 1s;
 }
 
 li.appended {
 	opacity: 1;
+	color: inherit;
 }
 
 li.deleted {
 	opacity: 0;
+}
+
+li.completed {
+	opacity: 1;
+	color: #a9a9a9;
+	text-decoration: line-through;
 }
