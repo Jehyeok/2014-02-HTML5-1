@@ -17,46 +17,41 @@ function insertTODO(e) {
 	
 	if (keyCode === KEY_CODE_ENTER) {
 		var todo = getTodo(this.value);
+		var addedTODO = null;
 
 		todoList.insertAdjacentHTML('beforeend', todo);
-		todoList.lastElementChild.className = 'appended';
+		addedTODO = todoList.lastElementChild;
+		addedTODO.offsetHeight;
+		addedTODO.className = 'appended';
 
 		this.value = '';
-
-		// 리무브 이벤트 등록
-		addRemoveEventToNewElement(todoList);
-		addCheckEventToNewElement(todoList);
 	}
 }
 
-function addRemoveEventToNewElement() {
-	var todo = todoList.lastElementChild;
-	
-	// 리무브 이벤트 등록
-	todo.querySelector('.destroy').addEventListener('click', removeTODO.bind(this, todoList), false);
-}
+function check(input) {
+	var todo = input.parentNode.parentNode;
 
-function addCheckEventToNewElement() {
-	var todo = todoList.lastElementChild;
-
-	todo.querySelector('input').addEventListener('click', check, false);
-}
-
-function check(e) {
-	var todo = e.target.parentNode.parentNode;
-
-	if (this.checked === true) todo.className = 'completed';
+	if (input.checked === true) todo.className = 'completed';
 	else todo.className = 'appended';
 }
 
-function removeTODO(todoList, e) {
+function removeTODO(button) {
 	// todo 제거
-	var todo = e.target.parentNode.parentNode;
+	var todo = button.parentNode.parentNode;
 	todo.className = 'deleted';
 
-	todo.addEventListener('transitionend', function(e) {
+	todo.addEventListener('transitionend', function removeLI(e) {
+		if (todo.parentNode === null) return;
 		if (e.target.tagName === 'LI') todoList.removeChild(todo);
-	}, false);
+	}, false)
+}
+
+function liClick(e) {
+	ele = e.target;
+	
+	if (ele.tagName === 'BUTTON') removeTODO(ele);
+	else if (ele.tagName === 'INPUT') check(ele);
 }
 
 todoInput.addEventListener('keydown', insertTODO, false);
+todoList.addEventListener('click', liClick, false);

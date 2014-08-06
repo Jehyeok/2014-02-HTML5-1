@@ -1,6 +1,6 @@
 li {
-	opacity: 0;
 	transition: opacity 1s;
+	opacity: 0;
 }
 
 li.appended {
@@ -17,3 +17,4 @@ li.completed {
 	color: #a9a9a9;
 	text-decoration: line-through;
 }
+
