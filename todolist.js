@@ -1,57 +1,56 @@
-// 상수
-var KEY_CODE_ENTER = 13;
+var TODO = {
+	todoList: document.getElementById('todo-list'),
+	todoInput: document.getElementById('new-todo'),
+	todoTemplate: _.template(document.getElementById('todo').innerHTML),
+	KEY_CODE_ENTER: 13,
 
-var todoList = document.getElementById('todo-list');
-var todoInput = document.getElementById('new-todo');
+	make: function(inputValue) {
+		var todo = this.todoTemplate({value: inputValue});
 
-function getTodo(inputValue) {
-	var todoTemplate = _.template(document.getElementById('todo').innerHTML);
+		return todo;
+	},
+	add: function(e) {
+		var keyCode = e.keyCode;
 	
-	var todo = todoTemplate({value: inputValue});
+		if (keyCode === this.KEY_CODE_ENTER) {
+			var todo = this.make(this.todoInput.value);
+			var addedTODO = null;
 
-	return todo;
-}
+			this.todoList.insertAdjacentHTML('beforeend', todo);
+			addedTODO = this.todoList.lastElementChild;
+			// add 할 때, opacity 애니메이션 실행
+			addedTODO.offsetHeight;
+			addedTODO.className = 'appended';
 
-function insertTODO(e) {
-	var keyCode = e.keyCode;
+			this.todoInput.value = '';
+		}
+	},
+	remove: function(deleteBtn) {
+		// todo 제거
+		var todo = deleteBtn.parentNode.parentNode;
+		todo.className = 'deleted';
+
+		todo.addEventListener('transitionend', function(e) {
+			if (todo.parentNode === null) return;
+			if (e.target.tagName === 'LI') this.todoList.removeChild(todo);
+		}.bind(this), false)
+	},
+	complete: function(input) {
+		var todo = input.parentNode.parentNode;
+
+		if (input.checked === true) todo.className = 'completed';
+		else todo.className = 'appended';	
+	},
+	liClick: function(e) {
+		ele = e.target;
 	
-	if (keyCode === KEY_CODE_ENTER) {
-		var todo = getTodo(this.value);
-		var addedTODO = null;
-
-		todoList.insertAdjacentHTML('beforeend', todo);
-		addedTODO = todoList.lastElementChild;
-		addedTODO.offsetHeight;
-		addedTODO.className = 'appended';
-
-		this.value = '';
+		if (ele.tagName === 'BUTTON') this.remove(ele);
+		else if (ele.tagName === 'INPUT') this.complete(ele);
+	},
+	init: function() {
+		this.todoInput.addEventListener('keydown', this.add.bind(this), false);
+		this.todoList.addEventListener('click', this.liClick.bind(this), false);	
 	}
-}
+};
 
-function check(input) {
-	var todo = input.parentNode.parentNode;
-
-	if (input.checked === true) todo.className = 'completed';
-	else todo.className = 'appended';
-}
-
-function removeTODO(button) {
-	// todo 제거
-	var todo = button.parentNode.parentNode;
-	todo.className = 'deleted';
-
-	todo.addEventListener('transitionend', function removeLI(e) {
-		if (todo.parentNode === null) return;
-		if (e.target.tagName === 'LI') todoList.removeChild(todo);
-	}, false)
-}
-
-function liClick(e) {
-	ele = e.target;
-	
-	if (ele.tagName === 'BUTTON') removeTODO(ele);
-	else if (ele.tagName === 'INPUT') check(ele);
-}
-
-todoInput.addEventListener('keydown', insertTODO, false);
-todoList.addEventListener('click', liClick, false);
+TODO.init();

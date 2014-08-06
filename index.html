@@ -6,6 +6,15 @@
 		<link rel="stylesheet" href="asset/base.css">
 		<link rel="stylesheet" href="asset/my.css">
 	</head>
+	<script type="text/html" id="todo">
+		<li>
+			<div class="view">
+				<input class="toggle" type="checkbox"></input>
+				<label><%- value %></label>
+				<button class="destroy"></button>
+			</div>
+		</li>
+	</script>
 	<body>
 		<section id="todoapp">
 			<header id="header">
@@ -43,13 +52,5 @@
 	</body>
 	<script type="text/javascript" src="underscore-min.js"></script>
 	<script type="text/javascript" src="todolist.js"></script>
-	<script type="text/html" id="todo">
-		<li>
-			<div class="view">
-				<input class="toggle" type="checkbox"></input>
-				<label><%- value %></label>
-				<button class="destroy"></button>
-			</div>
-		</li>
-	</script>
+	
 </html>
