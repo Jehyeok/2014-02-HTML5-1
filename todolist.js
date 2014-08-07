@@ -95,6 +95,7 @@ var TODO = {
 		},function(res) {
 			var todos = JSON.parse(res);
 			var todo = null;
+			var getTodos = '';
 
 			for (var i = 0; i < todos.length; i++) {
 				todo = this.make({
@@ -104,8 +105,9 @@ var TODO = {
 					checked: todos[i].completed === 1 ? 'checked' : null
 				});
 				
-				this.todoList.insertAdjacentHTML('beforeend', todo);
+				getTodos += todo;
 			};
+			this.todoList.insertAdjacentHTML('beforeend', getTodos);
 		}.bind(this));
 	},
 	complete: function(input) {
