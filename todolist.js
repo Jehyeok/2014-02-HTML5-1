@@ -97,16 +97,17 @@ var TODO = {
 			var todo = null;
 			var getTodos = '';
 
-			for (var i = 0; i < todos.length; i++) {
+			todos.map(function(todoObj) {
 				todo = this.make({
-					value: todos[i].todo,
-					className: todos[i].completed === 1 ? 'complete' : 'append',
-					key: todos[i].id,
-					checked: todos[i].completed === 1 ? 'checked' : null
+					value: todoObj.todo,
+					className: todoObj.completed === 1 ? 'complete' : 'append',
+					key: todoObj.id,
+					checked: todoObj.completed === 1 ? 'checked' : null
 				});
 				
 				getTodos += todo;
-			};
+			}, this);
+
 			this.todoList.insertAdjacentHTML('beforeend', getTodos);
 		}.bind(this));
 	},
