@@ -7,9 +7,9 @@
 		<link rel="stylesheet" href="asset/my.css">
 	</head>
 	<script type="text/html" id="todo">
-		<li>
+		<li class="<%- className %>" data-key="<%- key %>">
 			<div class="view">
-				<input class="toggle" type="checkbox"></input>
+				<input class="toggle" type="checkbox" <%- checked %>></input>
 				<label><%- value %></label>
 				<button class="destroy"></button>
 			</div>
@@ -52,5 +52,4 @@
 	</body>
 	<script type="text/javascript" src="underscore-min.js"></script>
 	<script type="text/javascript" src="todolist.js"></script>
-	
 </html>

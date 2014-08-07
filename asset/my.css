@@ -1,18 +1,18 @@
-li {
+#todo-list li {
 	transition: opacity 1s;
 	opacity: 0;
 }
 
-li.appended {
+#todo-list li.appended {
 	opacity: 1;
 	color: inherit;
 }
 
-li.deleted {
+#todo-list li.deleted {
 	opacity: 0;
 }
 
-li.completed {
+#todo-list li.completed {
 	opacity: 1;
 	color: #a9a9a9;
 	text-decoration: line-through;
