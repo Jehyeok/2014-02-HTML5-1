@@ -3,16 +3,16 @@
 	opacity: 0;
 }
 
-#todo-list li.appended {
+#todo-list li.append {
 	opacity: 1;
 	color: inherit;
 }
 
-#todo-list li.deleted {
+#todo-list li.delete {
 	opacity: 0;
 }
 
-#todo-list li.completed {
+#todo-list li.complete {
 	opacity: 1;
 	color: #a9a9a9;
 	text-decoration: line-through;

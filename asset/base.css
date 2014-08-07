@@ -215,7 +215,7 @@ label[for='toggle-all'] {
 	display: none;
 }
 
-#todo-list li .toggle {
+#todo-list li .complete {
 	text-align: center;
 	width: 40px;
 	/* auto, since non-WebKit browsers doesn't support input styling */
@@ -232,7 +232,7 @@ label[for='toggle-all'] {
 	appearance: none;
 }
 
-#todo-list li .toggle:after {
+#todo-list li .complete:after {
 	content: '✔';
 	/* 40 + a couple of pixels visual adjustment */
 	line-height: 43px;
@@ -241,7 +241,7 @@ label[for='toggle-all'] {
 	text-shadow: 0 -1px 0 #bfbfbf;
 }
 
-#todo-list li .toggle:checked:after {
+#todo-list li .complete:checked:after {
 	color: #85ada7;
 	text-shadow: 0 1px 0 #669991;
 	bottom: 1px;
@@ -402,11 +402,11 @@ label[for='toggle-all'] {
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	#toggle-all,
-	#todo-list li .toggle {
+	#todo-list li .complete {
 		background: none;
 	}
 
-	#todo-list li .toggle {
+	#todo-list li .complete {
 		height: 40px;
 	}
 

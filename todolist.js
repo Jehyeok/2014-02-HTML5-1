@@ -65,13 +65,13 @@ var TODO = {
 				addedTODO = this.todoList.firstElementChild;
 				// add 할 때, opacity 애니메이션 실행
 				addedTODO.offsetHeight;
-				addedTODO.className = 'appended';
+				addedTODO.className = 'append';
 
 				this.todoInput.value = '';
 			}.bind(this));
 		}
 	},
-	delete: function(deleteBtn) {
+	destroy: function(deleteBtn) {
 		// todo 제거
 		var todo = deleteBtn.parentNode.parentNode;
 
@@ -79,7 +79,7 @@ var TODO = {
 			key: todo.dataset.key,
 			method: 'DELETE'
 		}, function(res) {
-			todo.className = 'deleted';
+			todo.className = 'delete';
 
 			todo.addEventListener('transitionend', function(e) {
 				// X 여러번 클릭 시, 에러 방지
@@ -100,7 +100,7 @@ var TODO = {
 			for (var i = 0; i < todos.length; i++) {
 				todo = this.make({
 					value: todos[i].todo,
-					className: todos[i].completed === 1 ? 'completed' : 'appended',
+					className: todos[i].completed === 1 ? 'complete' : 'append',
 					key: todos[i].id,
 					checked: todos[i].completed === 1 ? 'checked' : null
 				});
@@ -119,15 +119,13 @@ var TODO = {
 			method: 'POST'
 		}, function(res) {
 			console.log(res);
-			if (input.checked === true) todo.className = 'completed';
-			else todo.className = 'appended';
+			if (input.checked === true) todo.className = 'complete';
+			else todo.className = 'append';
 		});
 	},
 	liClick: function(e) {
 		ele = e.target;
-	
-		if (ele.tagName === 'BUTTON') this.delete(ele);
-		else if (ele.tagName === 'INPUT') this.complete(ele);
+		this[ele.className](ele);
 	},
 	init: function() {
 		this.todoInput.addEventListener('keydown', this.add.bind(this), false);
