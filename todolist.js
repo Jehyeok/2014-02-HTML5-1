@@ -1,3 +1,71 @@
+// on / offline 동기화 하는 객체
+var TODOSynchronizer = {
+	onOffListener: function() {
+		document.getElementById('header').classList[navigator.onLine ? 'remove' : 'add']('offline');
+	},
+	init: function() {
+		window.addEventListener('online', this.onOffListener, false);
+		window.addEventListener('offline', this.onOffListener, false);
+	}
+};
+
+var TODOFilter = {
+	filter: document.getElementById('filters'),
+	todoList: document.getElementById('todo-list'),
+    curIdx: 0,
+    states: {
+        active: {
+            data: 'active',
+            url: 'active',
+            idx: 1
+        },
+        completed: {
+            data: 'completed',
+            url: 'completed',
+            idx: 2
+        },
+        all: {
+            data: 'all',
+            url: 'index.html',
+            idx: 0
+        }
+    },
+
+	changeState: function(e) {
+		var target = e.target;
+        var curState = this.states[target.innerText.toLowerCase()];
+
+		if (target.tagName === 'A') {
+            this.selectNavigator(curState.idx);
+
+            // todo-list ul 에 클래스 추가
+			this.todoList.classList.remove(this.todoList.getAttribute('class'));
+			this.todoList.classList.add('all-' + curState.data);
+
+            history.pushState({'method': curState.data}, null, curState.url);
+
+			e.preventDefault();
+		}
+	},
+    selectNavigator: function (idx) {
+        this.filter.querySelectorAll('a')[this.curIdx].classList.remove('selected');
+        this.filter.querySelectorAll('a')[idx].classList.add('selected');
+        this.curIdx = idx;
+    },
+    changeStateBack: function(e) {
+        var curState = this.states[e.state.method];
+
+        this.selectNavigator(curState.idx);
+        this.todoList.classList.remove(this.todoList.getAttribute('class'));
+        this.todoList.classList.add('all-' + curState.data);
+    },
+	init: function() {
+		this.filter.addEventListener('click', this.changeState.bind(this), false);
+        window.addEventListener('popstate', this.changeStateBack.bind(this), false);
+	}
+};
+
+// 서버에 ajax 요청 보내는 객체
 var TODOSynk = {
 	host: 'http://ui.nhnnext.org:3333/Jehyeok/',
 	xhr: null,
@@ -30,6 +98,7 @@ var TODOSynk = {
 	}
 };
 
+// TODO list CRUD 객체
 var TODO = {
 	todoList: document.getElementById('todo-list'),
 	todoInput: document.getElementById('new-todo'),
@@ -52,23 +121,27 @@ var TODO = {
 		if (keyCode === this.KEY_CODE_ENTER) {
 			var inputValue = this.todoInput.value;
 
-			TODOSynk.add({
-				todo: inputValue,
-				method: 'PUT'
-			}, function(res) {
-				var todo = this.make({
-					value: this.todoInput.value
-				});
-				var addedTODO = null;
+			if (navigator.onLine) {
+				TODOSynk.add({
+					todo: inputValue,
+					method: 'PUT'
+				}, function(res) {
+					var todo = this.make({
+						value: this.todoInput.value
+					});
+					var addedTODO = null;
 
-				this.todoList.insertAdjacentHTML('afterbegin', todo);
-				addedTODO = this.todoList.firstElementChild;
-				// add 할 때, opacity 애니메이션 실행
-				addedTODO.offsetHeight;
-				addedTODO.className = 'append';
+					this.todoList.insertAdjacentHTML('afterbegin', todo);
+					addedTODO = this.todoList.firstElementChild;
+					// add 할 때, opacity 애니메이션 실행
+					addedTODO.offsetHeight;
+					addedTODO.className = 'append';
 
-				this.todoInput.value = '';
-			}.bind(this));
+					this.todoInput.value = '';
+				}.bind(this));	
+			} else {
+				// 클라이언트 저장
+			}
 		}
 	},
 	destroy: function(deleteBtn) {
@@ -100,7 +173,7 @@ var TODO = {
 			todos.map(function(todoObj) {
 				todo = this.make({
 					value: todoObj.todo,
-					className: todoObj.completed === 1 ? 'complete' : 'append',
+					className: todoObj.completed === 1 ? 'completed' : 'append',
 					key: todoObj.id,
 					checked: todoObj.completed === 1 ? 'checked' : null
 				});
@@ -120,7 +193,7 @@ var TODO = {
 			method: 'POST'
 		}, function(res) {
 			console.log(res);
-			if (input.checked === true) todo.className = 'complete';
+			if (input.checked === true) todo.className = 'completed';
 			else todo.className = 'append';
 		});
 	},
@@ -136,3 +209,5 @@ var TODO = {
 };
 
 TODO.init();
+TODOSynchronizer.init();
+TODOFilter.init();
